@@ -1,9 +1,19 @@
 import './App.css';
 
-import { Socket } from "socket.io-client";
-const socket = Socket.connect('http://localhost:3000');
+import { useEffect, useState } from 'react';
+
+import io from "socket.io-client";
 
 function App() {
+  useEffect(() => {
+    const socket = io("http://localhost:3001");
+    socket.connect();
+
+    return () => {
+
+    };
+  })
+
   return (
     <div className="App">
       Chat
