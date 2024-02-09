@@ -29,10 +29,12 @@ axios.interceptors.response.use(
                 return response;
             case 401:
                 return response;
+            case 402:
+                return response;
             default:
                 return response;
         }
-        
+
     },
     (error) => {
         return Promise.reject(error);
