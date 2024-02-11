@@ -22,9 +22,10 @@ type DrawerItem = {
 type Props = {
   groups: DrawerItem[];
   persons: DrawerItem[];
+  openChat: (id: string, type: string) => void;
 };
 
-export const LeftDrawer: FC<Props> = ({ groups, persons }) => {
+export const LeftDrawer: FC<Props> = ({ groups, persons, openChat }) => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -47,7 +48,10 @@ export const LeftDrawer: FC<Props> = ({ groups, persons }) => {
           {groups?.map((group, index) => (
             <ListItem key={group.id} disablePadding>
               <ListItemButton>
-                <ListItemText primary={group.name} />
+                <ListItemText
+                  onClick={() => openChat(group.id, "group")}
+                  primary={group.name}
+                />
               </ListItemButton>
             </ListItem>
           ))}
@@ -58,7 +62,10 @@ export const LeftDrawer: FC<Props> = ({ groups, persons }) => {
           {persons?.map((person, index) => (
             <ListItem key={person.id} disablePadding>
               <ListItemButton>
-                <ListItemText primary={`${person.name}`} />
+                <ListItemText
+                  onClick={() => openChat(person.id, "single")}
+                  primary={`${person.name}`}
+                />
               </ListItemButton>
             </ListItem>
           ))}
