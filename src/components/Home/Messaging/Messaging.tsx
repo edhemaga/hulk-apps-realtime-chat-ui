@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 
 import io from "socket.io-client";
 
 import { IMessage } from "../../../shared/models/Message/IMessage";
 
 import { ChatInput } from "./Input/ChatInput";
+import axios from "axios";
 
 type Props = {
   userId: string;
@@ -16,6 +17,13 @@ const socket = io("ws://localhost:3001", {
 
 export const Messaging: React.FC<Props> = ({ userId, groupId }) => {
   const [messages, setMessages] = useState<Partial<IMessage>[]>([]);
+
+  useLayoutEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(`/message/group/${groupId}`);
+      setMessages(response.data ?? []);
+    };
+  });
 
   useEffect(() => {
     socket.on(`receive_message_group_${groupId}`, (data: Partial<IMessage>) => {
