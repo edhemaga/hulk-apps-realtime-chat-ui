@@ -11,8 +11,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { FC } from "react";
+import { Button } from "@mui/material";
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 type DrawerItem = {
   id: string;
@@ -44,7 +45,10 @@ export const LeftDrawer: FC<Props> = ({ groups, persons, openChat }) => {
         <Toolbar />
         <Divider />
         <List>
-          <div className="pb-2 pl-2 font-bold">Groups</div>
+          <div className="flex">
+            <div className="m-auto font-bold">Groups</div>
+            <Button className='mt-auto mb-auto mr-1 ml-1'>Add new group</Button>
+          </div>
           {groups?.map((group, index) => (
             <ListItem key={group.id} disablePadding>
               <ListItemButton>

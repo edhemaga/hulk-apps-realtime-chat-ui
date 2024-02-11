@@ -21,7 +21,7 @@ const Home: FC = () => {
   const [groups, setGroups] = useState<IGroup[]>([]);
 
   const [currentUser, setCurrentUser] = useState<string>();
-  const [selectedGroup, setSeletedGroup] = useState<IGroup>();
+  const [selectedGroup, setSelectedGroup] = useState<IGroup>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,7 +59,7 @@ const Home: FC = () => {
       `/group/${currentUser}/${id}`
     );
 
-    setSeletedGroup(response.data as IGroup);
+    setSelectedGroup(response.data as IGroup);
   };
 
   return (
