@@ -8,6 +8,7 @@ import { LeftDrawer } from "./Drawer/Drawer";
 
 import { IUser } from "../../shared/models/User/IUser";
 import { IGroup } from "../../shared/models/Group/IGroup";
+import { Messaging } from "./Messaging/Messaging";
 
 interface JwtPayloadUserClaims extends JwtPayload {
   id: string;
@@ -72,16 +73,13 @@ const Home: FC = () => {
   };
 
   return (
-    <>
-      <LeftDrawer
-        persons={persons}
-        groups={groups}
-        openChat={openChat}
-      ></LeftDrawer>
-      {selectedGroup?.messages.map((message) => {
+    <div className="flex">
+      <LeftDrawer persons={persons} groups={groups} openChat={openChat} />
+      <Messaging></Messaging>
+      {/* {selectedGroup?.messages.map((message) => {
         <div key={message.id}>{message.value}</div>;
-      })}
-    </>
+      })} */}
+    </div>
   );
 };
 
