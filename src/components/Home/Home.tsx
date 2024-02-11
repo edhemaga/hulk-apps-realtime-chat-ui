@@ -22,7 +22,7 @@ const Home: FC = () => {
   const [groups, setGroups] = useState<IGroup[]>([]);
 
   const [currentUser, setCurrentUser] = useState<string | undefined>();
-  const [selectedGroup, setSelectedGroup] = useState<IGroup>();
+  const [selectedGroup, setSelectedGroup] = useState<IGroup | undefined>();
 
   useLayoutEffect(() => {
     let claims: JwtPayloadUserClaims = jwtDecode(
@@ -60,13 +60,16 @@ const Home: FC = () => {
     };
   }, [currentUser]);
 
-  const openChat = async (id: string, type: string) => {
+  const openChat = (id: string, type: string) => {
     try {
-      const response = await axiosInstance.get<IGroup>(
-        `/group/${currentUser}/${id}`
-      );
+      const fetchData = async () => {
+        const response = await axiosInstance.get<IGroup>(
+          `/group/${currentUser}/${id}`
+        );
+        setSelectedGroup(response.data);
+      }
+      fetchData();
 
-      setSelectedGroup(response.data as IGroup);
     } catch (e) {
       //TODO Add toaster with error message
     }
@@ -75,10 +78,11 @@ const Home: FC = () => {
   return (
     <div className="flex">
       <LeftDrawer persons={persons} groups={groups} openChat={openChat} />
-      <Messaging></Messaging>
-      {/* {selectedGroup?.messages.map((message) => {
-        <div key={message.id}>{message.value}</div>;
-      })} */}
+      {
+        currentUser &&
+        selectedGroup &&
+        <Messaging userId={currentUser} groupId={selectedGroup.id}></Messaging>
+      }
     </div>
   );
 };
