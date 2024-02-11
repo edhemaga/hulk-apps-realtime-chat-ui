@@ -6,6 +6,8 @@ import { IMessage } from "../../../shared/models/Message/IMessage";
 
 import { ChatInput } from "./Input/ChatInput";
 import axios from "axios";
+import axiosInstance from "../../../shared/network/axios";
+import { Message } from "./Message/Message";
 
 type Props = {
   userId: string;
@@ -20,10 +22,13 @@ export const Messaging: React.FC<Props> = ({ userId, groupId }) => {
 
   useLayoutEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`/message/group/${groupId}`);
-      setMessages(response.data ?? []);
+      const response = await axiosInstance.get(`/message/group/${groupId}`);
+      const remappedResponse = response.data.map((arg: any[]) => { return arg[0] });
+      setMessages(remappedResponse ?? []);
     };
-  });
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     socket.on(`receive_message_group_${groupId}`, (data: Partial<IMessage>) => {
@@ -42,10 +47,15 @@ export const Messaging: React.FC<Props> = ({ userId, groupId }) => {
 
   return (
     <div className="w-full m-12">
-      <div>
-        {messages.map((message, index) => (
-          <div key={message?.id || index}>{message?.content}</div>
-        ))}
+      <div style={{ height: '70vh', overflow: 'scroll' }}>
+        {
+          messages.map((message, index) => {
+            if (message.content) {
+              const isSender = message.senderId === userId;
+              return <Message key={message.id ?? index} isSender={isSender} message={message}></Message>
+            }
+          })
+        }
       </div>
       <div className="">
         <ChatInput onSubmit={handleSendMessage} />
