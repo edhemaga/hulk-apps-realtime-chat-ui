@@ -9,39 +9,34 @@ import { ChatInput } from "./Input/ChatInput";
 type Props = {
   userId: string;
   groupId: string;
-}
+};
+const socket = io("ws://localhost:3001", {
+  transports: ["websocket", "polling"],
+});
 
 export const Messaging: React.FC<Props> = ({ userId, groupId }) => {
   const [messages, setMessages] = useState<Partial<IMessage>[]>([]);
 
-
-  const socket = io("http://localhost:3001", {
-    transports: ["websocket", "polling"]
-  });
-
-  socket.connect();
-  socket.on(`receive_message`, (data: any) => {
-    console.log(data);
-    setMessages(prev => [...prev, data.data])
-  })
+  useEffect(() => {
+    socket.on(`receive_message_group_${groupId}`, (data: Partial<IMessage>) => {
+      setMessages((prev) => [...prev, data]);
+    });
+  }, []);
 
   const handleSendMessage = async (message: string) => {
-
     const messageToSend: Partial<IMessage> = {
       content: message,
       senderId: userId,
-      groupId: groupId
+      groupId: groupId,
     };
     socket.emit(`send_message`, messageToSend);
-
   };
-
 
   return (
     <div className="w-full m-12">
       <div>
         {messages.map((message, index) => (
-          <div key={message?.id}>{message?.content}</div>
+          <div key={message?.id || index}>{message?.content}</div>
         ))}
       </div>
       <div className="">
