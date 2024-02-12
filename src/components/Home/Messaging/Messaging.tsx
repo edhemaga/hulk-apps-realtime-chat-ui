@@ -16,6 +16,9 @@ type Props = {
 };
 const socket = io("ws://localhost:3001", {
   transports: ["websocket", "polling"],
+  auth: {
+    token: localStorage.getItem('access_token'), // Set your actual token here
+  },
 });
 
 export const Messaging: React.FC<Props> = ({ userId, group }) => {
