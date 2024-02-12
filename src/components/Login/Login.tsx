@@ -10,19 +10,27 @@ import { TextField, Button, Container, Grid } from "@mui/material";
 const Login: FC = () => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loginStatus, setLoginStatus] = useState<string>("");
 
   const handleLogin = async () => {
-    const response = await axiosInstance.post("/user/login", {
-      username: email,
-      password: password,
-    });
-    if (response.data) {
-      localStorage.setItem("access_token", response.data);
-      navigate("/");
+    try {
+      const response = await axiosInstance.post("/user/login", {
+        username: email,
+        password: password,
+      });
+      if (response.data) {
+        localStorage.setItem("access_token", response.data);
+        navigate("/");
+      }
+    } catch (err) {
+      setEmail('');
+      setPassword('');
+      setLoginStatus('Login unsuccessful! Please try again!')
     }
   };
+
   return (
     <div className="h-screen flex">
       <Container className="m-auto" maxWidth="sm">
@@ -52,6 +60,10 @@ const Login: FC = () => {
               Submit
             </Button>
           </Grid>
+          <div className="block pt-4 pl-4">
+            {loginStatus && <div className="my-2 text-red-600">{loginStatus}</div>}
+            <div>No account? <a href="register">Register here</a>.</div>
+          </div>
         </Grid>
       </Container>
     </div>

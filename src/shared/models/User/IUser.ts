@@ -8,7 +8,6 @@ export interface IUser extends IBase {
     dob: Date;
     email: string;
     password: string;
-    messages: IMessage[];
 }
 
 export interface IUserRegistration extends IUser {

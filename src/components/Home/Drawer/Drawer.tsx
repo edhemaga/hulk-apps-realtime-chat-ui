@@ -2,6 +2,9 @@ import "./Drawer.css";
 
 import { FC, useState } from "react";
 
+//Router
+import { useNavigate } from "react-router-dom";
+
 //Material
 import {
   Box,
@@ -41,6 +44,8 @@ export const LeftDrawer: FC<Props> = ({
   persons,
   openChat,
 }) => {
+  const navigate = useNavigate();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -54,6 +59,11 @@ export const LeftDrawer: FC<Props> = ({
   const handleSaveGroup = () => {
     handleCloseModal();
   };
+
+  const logout = () => {
+    localStorage.clear();
+    navigate('/login')
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -71,9 +81,10 @@ export const LeftDrawer: FC<Props> = ({
         anchor="left"
       >
         <Toolbar />
+        <Button onClick={logout}>Log out</Button>
         <Divider />
         <List>
-          <div className="flex">
+          <div className="flex mb-2">
             <div className="m-auto ml-2 font-bold">Groups</div>
             <div className="my-auto mx-2">
               <Button onClick={handleOpenModal} variant="contained">
