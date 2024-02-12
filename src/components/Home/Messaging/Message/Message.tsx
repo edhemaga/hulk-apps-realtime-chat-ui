@@ -10,6 +10,7 @@ import { formatDate } from "../../../../shared/util/helpers/helper";
 type ChatMessageProps = {
   message: Partial<IMessage>;
   isSender: boolean;
+  sender: string;
 };
 
 type ChatMessageContainerProps = {
@@ -27,14 +28,14 @@ const ChatMessageContainer = styled(Paper)<ChatMessageContainerProps>(
   })
 );
 
-export const Message: React.FC<ChatMessageProps> = ({ message, isSender }) => {
+export const Message: React.FC<ChatMessageProps> = ({ message, isSender, sender }) => {
   return (
     <div className="flex">
       <ChatMessageContainer
         className={isSender ? "to-right" : "to-left"}
         isSender={isSender}
       >
-        <div className="text-xs">Sent by: {message.id}</div>
+        <div className="text-xs">Sent by: {sender}</div>
         <p>{message.content}</p>
         {message.createdOn ? (
           <div className="text-xs">
