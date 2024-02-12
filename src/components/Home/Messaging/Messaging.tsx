@@ -1,3 +1,5 @@
+import "./Messaging";
+
 import React, { useEffect, useLayoutEffect, useState } from "react";
 
 import io from "socket.io-client";
@@ -23,7 +25,9 @@ export const Messaging: React.FC<Props> = ({ userId, groupId }) => {
   useLayoutEffect(() => {
     const fetchData = async () => {
       const response = await axiosInstance.get(`/message/group/${groupId}`);
-      const remappedResponse = response.data.map((arg: any[]) => { return arg[0] });
+      const remappedResponse = response.data.map((arg: any[]) => {
+        return arg[0];
+      });
       setMessages(remappedResponse ?? []);
     };
 
@@ -47,15 +51,22 @@ export const Messaging: React.FC<Props> = ({ userId, groupId }) => {
 
   return (
     <div className="w-full m-12">
-      <div style={{ height: '70vh', overflow: 'scroll' }}>
-        {
-          messages.map((message, index) => {
-            if (message.content) {
-              const isSender = message.senderId === userId;
-              return <Message key={message.id ?? index} isSender={isSender} message={message}></Message>
-            }
-          })
-        }
+      <div
+        className="messages-wrapper"
+        style={{ height: "70vh", overflowY: "scroll" }}
+      >
+        {messages.map((message, index) => {
+          if (message.content) {
+            const isSender = message.senderId === userId;
+            return (
+              <Message
+                key={message.id ?? index}
+                isSender={isSender}
+                message={message}
+              ></Message>
+            );
+          }
+        })}
       </div>
       <div className="">
         <ChatInput onSubmit={handleSendMessage} />

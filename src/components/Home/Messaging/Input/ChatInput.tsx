@@ -24,7 +24,7 @@ export const ChatInput: FC<ChatInputProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="mt-12" onSubmit={handleSubmit}>
       <Box display="flex" alignItems="center">
         <div className="chat-input">
           <TextField
