@@ -1,0 +1,13 @@
+.messages-wrapper {
+  height: 70vh;
+  overflow-y: scroll;
+  padding: 0 10px;
+}
+
+.to-right {
+  margin-right: 0 !important;
+}
+
+.to-left {
+  margin-left: 0 !important;
+}

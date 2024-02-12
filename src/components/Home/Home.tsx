@@ -1,6 +1,6 @@
 import { FC, useEffect, useLayoutEffect, useState } from "react";
 
-import { JwtPayload, jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import axiosInstance from "../../shared/network/axios";
 
 //Components
@@ -9,11 +9,7 @@ import { LeftDrawer } from "./Drawer/Drawer";
 import { IUser } from "../../shared/models/User/IUser";
 import { IGroup } from "../../shared/models/Group/IGroup";
 import { Messaging } from "./Messaging/Messaging";
-
-interface JwtPayloadUserClaims extends JwtPayload {
-  id: string;
-  email: string;
-}
+import { getTokenClaimUserId } from "../../shared/util/helpers/helper";
 
 //TODO Add type for current user
 
@@ -21,19 +17,12 @@ const Home: FC = () => {
   const [persons, setPersons] = useState<IUser[]>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);
 
-  const [currentUser, setCurrentUser] = useState<string | undefined>();
-  const [selectedGroup, setSelectedGroup] = useState<IGroup | undefined>();
-
-  useLayoutEffect(() => {
-    let claims: JwtPayloadUserClaims = jwtDecode(
-      localStorage.getItem("access_token") ?? ""
-    );
-    setCurrentUser(claims.id);
-
-    return () => {
-      setCurrentUser(undefined);
-    };
-  }, []);
+  const [currentUser, setCurrentUser] = useState<string | undefined>(
+    getTokenClaimUserId()
+  );
+  const [selectedGroup, setSelectedGroup] = useState<IGroup | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,22 +56,24 @@ const Home: FC = () => {
           `/group/${currentUser}/${id}`
         );
         setSelectedGroup(response.data);
-      }
+      };
       fetchData();
-
-    } catch (e) {
+    } catch (err) {
       //TODO Add toaster with error message
+      throw new Error(err as string);
     }
   };
 
   return (
     <div className="flex">
-      <LeftDrawer persons={persons} groups={groups} openChat={openChat} />
-      {
-        currentUser &&
-        selectedGroup &&
-        <Messaging userId={currentUser} groupId={selectedGroup.id}></Messaging>
-      }
+      {currentUser && (
+        <>
+          <LeftDrawer persons={persons} groups={groups} openChat={openChat} />
+          {selectedGroup && (
+            <Messaging userId={currentUser} group={selectedGroup}></Messaging>
+          )}
+        </>
+      )}
     </div>
   );
 };

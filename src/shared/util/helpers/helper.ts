@@ -1,3 +1,6 @@
+import { jwtDecode } from "jwt-decode";
+import { JwtPayloadUserClaims } from "../../models/Base/Jwt";
+
 export const formatDate = (date: Date): string => {
     return (
         [
@@ -12,4 +15,11 @@ export const formatDate = (date: Date): string => {
             date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
         ].join(':')
     );
+}
+
+export const getTokenClaimUserId = (): string => {
+    let claims: JwtPayloadUserClaims = jwtDecode(
+        localStorage.getItem("access_token") ?? ""
+    );
+    return claims.id;
 }

@@ -18,11 +18,12 @@ type ChatMessageContainerProps = {
 const ChatMessageContainer = styled(Paper)<ChatMessageContainerProps>(
   ({ theme, isSender }: any) => ({
     padding: theme.spacing(1),
-    maxWidth: "350px",
+    maxWidth: "450px",
+    minWidth: "250px",
     backgroundColor: isSender ? "#2196f3" : "#f5f5f5",
     color: isSender ? "#fff" : "#333",
     borderRadius: "8px",
-    margin: "20px 4px 0 auto",
+    margin: "20px 4px auto auto",
   })
 );
 
@@ -30,7 +31,7 @@ export const Message: React.FC<ChatMessageProps> = ({ message, isSender }) => {
   return (
     <div className="flex">
       <ChatMessageContainer
-        className={isSender ? "mr-0" : "ml-0"}
+        className={isSender ? "to-right" : "to-left"}
         isSender={isSender}
       >
         <div className="text-xs">Sent by: {message.id}</div>
