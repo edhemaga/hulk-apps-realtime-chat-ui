@@ -1,7 +1,13 @@
 .chat-button {
-  padding: 0 18px;
+    padding: 0 18px;
 }
+
 .chat-input {
-  width: 100%;
-  margin-right: 8px;
+    width: 100%;
+    margin-right: 8px;
+}
+
+.send-button {
+    background-color: #2196f3;
+    padding: 15px 48px;
 }

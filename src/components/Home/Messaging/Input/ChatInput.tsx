@@ -38,10 +38,9 @@ export const ChatInput: FC<ChatInputProps> = ({ onSubmit }) => {
         </div>
         <div className="chat-button">
           <Button
-            style={{ padding: "15px 48px" }}
+            className="send-button"
             type="submit"
             variant="contained"
-            color="primary"
           >
             Send
           </Button>

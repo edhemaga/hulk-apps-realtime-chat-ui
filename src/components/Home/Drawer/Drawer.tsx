@@ -1,5 +1,8 @@
-import { FC } from "react";
+import "./Drawer.css";
 
+import { FC, useState } from "react";
+
+//Material
 import {
   Box,
   Drawer,
@@ -11,11 +14,15 @@ import {
   ListItemButton,
   ListItemText,
   Button,
+  Modal
 } from "@mui/material";
+
+//Components
+import AddGroupModal from "./AddGroupModal/AddGroupModal";
 
 const drawerWidth = 300;
 
-type DrawerItem = {
+export type DrawerItem = {
   id: string;
   name: string;
 };
@@ -27,6 +34,24 @@ type Props = {
 };
 
 export const LeftDrawer: FC<Props> = ({ groups, persons, openChat }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSaveGroup = (group: { name: string; members: string[] }) => {
+    // Handle saving the group data
+    console.log('Group saved:', group);
+
+    // Close the modal after saving
+    handleCloseModal();
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -46,9 +71,12 @@ export const LeftDrawer: FC<Props> = ({ groups, persons, openChat }) => {
         <Divider />
         <List>
           <div className="flex">
-            <div className="m-auto font-bold">Groups</div>
-            <Button className="mt-auto mb-auto mr-1 ml-1">Add new group</Button>
+            <div className="m-auto ml-2 font-bold">Groups</div>
+            <div className="my-auto mx-2"><Button onClick={handleOpenModal} variant="contained">Add new group</Button></div>
           </div>
+          <Modal className="align-center-modal" open={isModalOpen} onClose={handleCloseModal}>
+            <AddGroupModal persons={persons} onSave={handleSaveGroup} />
+          </Modal>
           {groups?.map((group, index) => (
             <ListItem key={group.id} disablePadding>
               <ListItemButton>
