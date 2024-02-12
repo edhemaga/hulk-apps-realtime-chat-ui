@@ -14,7 +14,7 @@ import {
   ListItemButton,
   ListItemText,
   Button,
-  Modal
+  Modal,
 } from "@mui/material";
 
 //Components
@@ -28,12 +28,19 @@ export type DrawerItem = {
 };
 
 type Props = {
+  //TODO Extract to context userId
+  userId: string;
   groups: DrawerItem[];
   persons: DrawerItem[];
   openChat: (id: string, type: string) => void;
 };
 
-export const LeftDrawer: FC<Props> = ({ groups, persons, openChat }) => {
+export const LeftDrawer: FC<Props> = ({
+  userId,
+  groups,
+  persons,
+  openChat,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -44,11 +51,7 @@ export const LeftDrawer: FC<Props> = ({ groups, persons, openChat }) => {
     setIsModalOpen(false);
   };
 
-  const handleSaveGroup = (group: { name: string; members: string[] }) => {
-    // Handle saving the group data
-    console.log('Group saved:', group);
-
-    // Close the modal after saving
+  const handleSaveGroup = () => {
     handleCloseModal();
   };
 
@@ -72,16 +75,28 @@ export const LeftDrawer: FC<Props> = ({ groups, persons, openChat }) => {
         <List>
           <div className="flex">
             <div className="m-auto ml-2 font-bold">Groups</div>
-            <div className="my-auto mx-2"><Button onClick={handleOpenModal} variant="contained">Add new group</Button></div>
+            <div className="my-auto mx-2">
+              <Button onClick={handleOpenModal} variant="contained">
+                Add new group
+              </Button>
+            </div>
           </div>
-          <Modal className="align-center-modal" open={isModalOpen} onClose={handleCloseModal}>
-            <AddGroupModal persons={persons} onSave={handleSaveGroup} />
+          <Modal
+            className="align-center-modal"
+            open={isModalOpen}
+            onClose={handleCloseModal}
+          >
+            <AddGroupModal
+              userId={userId}
+              persons={persons}
+              onSave={handleSaveGroup}
+            />
           </Modal>
           {groups?.map((group, index) => (
             <ListItem key={group.id} disablePadding>
               <ListItemButton>
                 <ListItemText
-                  onClick={() => openChat(group.id, "group")}
+                  onClick={() => openChat(group.id, "room")}
                   primary={group.name}
                 />
               </ListItemButton>

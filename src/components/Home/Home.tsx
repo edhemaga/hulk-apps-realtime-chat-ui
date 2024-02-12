@@ -51,13 +51,17 @@ const Home: FC = () => {
 
   const openChat = (id: string, type: string) => {
     try {
-      const fetchData = async () => {
-        const response = await axiosInstance.get<IGroup>(
-          `/group/${currentUser}/${id}`
-        );
+      const fetchData = async (path: string) => {
+        const response = await axiosInstance.get<IGroup>(path);
         setSelectedGroup(response.data);
       };
-      fetchData();
+      if (type === "single") {
+        fetchData(`/group/${currentUser}/${id}`);
+      } else if (type === "room") {
+        fetchData(`/group/room/${id}`);
+      } else {
+        throw new Error("Type not specified!");
+      }
     } catch (err) {
       //TODO Add toaster with error message
       throw new Error(err as string);
@@ -68,7 +72,12 @@ const Home: FC = () => {
     <div className="flex">
       {currentUser && (
         <>
-          <LeftDrawer persons={persons} groups={groups} openChat={openChat} />
+          <LeftDrawer
+            userId={currentUser}
+            persons={persons}
+            groups={groups}
+            openChat={openChat}
+          />
           {selectedGroup && (
             <Messaging userId={currentUser} group={selectedGroup}></Messaging>
           )}
