@@ -7,7 +7,7 @@ import axiosInstance from "../../shared/network/axios";
 import { LeftDrawer } from "./Drawer/Drawer";
 
 import { IUser } from "../../shared/models/User/IUser";
-import { IGroup } from "../../shared/models/Group/IGroup";
+import { IGroup, IGroupWithUserInfo } from "../../shared/models/Group/IGroup";
 import { Messaging } from "./Messaging/Messaging";
 import { getTokenClaimUserId } from "../../shared/util/helpers/helper";
 
@@ -20,7 +20,7 @@ const Home: FC = () => {
   const [currentUser, setCurrentUser] = useState<string | undefined>(
     getTokenClaimUserId()
   );
-  const [selectedGroup, setSelectedGroup] = useState<IGroup | undefined>(
+  const [selectedGroup, setSelectedGroup] = useState<IGroupWithUserInfo | undefined>(
     undefined
   );
 
@@ -52,7 +52,7 @@ const Home: FC = () => {
   const openChat = (id: string, type: string) => {
     try {
       const fetchData = async (path: string) => {
-        const response = await axiosInstance.get<IGroup>(path);
+        const response = await axiosInstance.get<IGroupWithUserInfo>(path);
         setSelectedGroup(response.data);
       };
       if (type === "single") {
@@ -79,7 +79,7 @@ const Home: FC = () => {
             openChat={openChat}
           />
           {selectedGroup && (
-            <Messaging userId={currentUser} group={selectedGroup}></Messaging>
+            <Messaging userId={currentUser} data={selectedGroup}></Messaging>
           )}
         </>
       )}
