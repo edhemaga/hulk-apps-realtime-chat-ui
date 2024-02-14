@@ -4,8 +4,7 @@ import axios, {
 } from 'axios';
 
 const axiosInstance = axios.create({
-    //baseURL: "https://realtime-chat-hulk-apps.onrender.com",
-    baseURL: "http://localhost:3001/",
+    baseURL: "https://realtime-chat-hulk-apps.onrender.com",
     params: {}
 })
 

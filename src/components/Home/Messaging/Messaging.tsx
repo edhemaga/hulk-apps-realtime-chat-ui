@@ -14,8 +14,7 @@ type Props = {
   userId: string;
   data: IGroupWithUserInfo;
 };
-//const socket = io("https://realtime-chat-hulk-apps.onrender.com", {
-const socket = io("http://localhost:3001", {
+const socket = io("https://realtime-chat-hulk-apps.onrender.com", {
   transports: ["websocket", "polling"],
   auth: {
     token: localStorage.getItem("access_token"), // Set your actual token here
