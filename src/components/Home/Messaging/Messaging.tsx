@@ -14,11 +14,13 @@ type Props = {
   userId: string;
   data: IGroupWithUserInfo;
 };
-const socket = io("ws://localhost:3001", {
+//const socket = io("https://realtime-chat-hulk-apps.onrender.com", {
+const socket = io("http://localhost:3001", {
   transports: ["websocket", "polling"],
   auth: {
-    token: localStorage.getItem('access_token'), // Set your actual token here
+    token: localStorage.getItem("access_token"), // Set your actual token here
   },
+  secure: true,
 });
 
 export const Messaging: React.FC<Props> = ({ userId, data }) => {
@@ -53,7 +55,9 @@ export const Messaging: React.FC<Props> = ({ userId, data }) => {
       <div className="messages-wrapper">
         {messages.map((message, index) => {
           //Remap ID with Full name of user
-          const sender = data.usersInfo.find(arg => arg.id == message.senderId)?.fullname;
+          const sender = data.usersInfo.find(
+            (arg) => arg.id == message.senderId
+          )?.fullname;
           if (message?.content) {
             return (
               <Message

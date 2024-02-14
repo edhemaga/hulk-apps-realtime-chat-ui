@@ -22,6 +22,7 @@ import {
 
 //Components
 import AddGroupModal from "./AddGroupModal/AddGroupModal";
+import axiosInstance from "../../../shared/network/axios";
 
 const drawerWidth = 300;
 
@@ -36,6 +37,7 @@ type Props = {
   groups: DrawerItem[];
   persons: DrawerItem[];
   openChat: (id: string, type: string) => void;
+  refresh: () => void;
 };
 
 export const LeftDrawer: FC<Props> = ({
@@ -43,6 +45,7 @@ export const LeftDrawer: FC<Props> = ({
   groups,
   persons,
   openChat,
+  refresh,
 }) => {
   const navigate = useNavigate();
 
@@ -58,12 +61,24 @@ export const LeftDrawer: FC<Props> = ({
 
   const handleSaveGroup = () => {
     handleCloseModal();
+    refresh();
+  };
+
+  const leaveGroup = async (groupId: string) => {
+    try {
+      //TODO Add leave group confirmation modal
+      await axiosInstance.get(`/group/leave/${groupId}`);
+      refresh();
+    } catch (err) {
+      console.log(err);
+      throw new Error(`Group could not be left!`);
+    }
   };
 
   const logout = () => {
     localStorage.clear();
-    navigate('/login')
-  }
+    navigate("/login");
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -110,6 +125,12 @@ export const LeftDrawer: FC<Props> = ({
                   onClick={() => openChat(group.id, "room")}
                   primary={group.name}
                 />
+                <Button
+                  onClick={() => leaveGroup(group.id)}
+                  variant="contained"
+                >
+                  Leave
+                </Button>
               </ListItemButton>
             </ListItem>
           ))}
